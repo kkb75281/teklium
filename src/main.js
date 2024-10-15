@@ -8,7 +8,8 @@ import router from './router';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-const skapi = new Skapi('ap22NMqyE0aASl1ogi5D','bf305ace-03b5-4f9d-b88f-291458748ca3');
+// const skapi = new Skapi('ap22QUJz8RHa9OVq0zmZ', '80b7a637-0258-4701-9cef-68ad6ed43b7f'); // test 계정
+const skapi = new Skapi('ap22Qln8C2quyAnss5FH', '36e590fe-fc8d-45f3-8c12-5739e76d4e7f'); // 보영님 계정
 
 getNews();
 

@@ -15,16 +15,26 @@ section.white
             img(src="/assets/img/error.svg" style="width:3rem; opacity:0.7")
             p No notice has been uploaded
         .cardWrap(v-else)
-            //- a.card(v-for="r in releases" :href="r.url")
-            a.card(v-for="r in releases" :href="r.message_id == 'sttj74hebi4cbp4tslc4hah06787taf37kcond81' ? 'https://www.nxtechusa.com/articles/innovative-approach-to-ai-computing-memory-based-cpu-and-gpu-integration/22513/' : 'https://www.nxtechusa.com/articles/the-future-of-ai-computing-beyond-silicon/22514/'" target="_blank")
-                .image(v-if="r.img")
-                    img(:src="r.img")
-                    //- img(v-else src="/assets/img/teklium.png" style="width:40px; height:40px; opacity:0.5;")
-                .date(style="color:#999;font-size:0.8rem;") {{ formatTimestamp(r.timestamp) }}
-                .content
-                    h3(style='margin-top:0;') {{ r.subject }}
-                    p(:class="{'long' : !r.img}") {{ r.cont }}
-                .button(style='padding:0 .5rem;') Read More >
+            template(v-for="r in releases")
+                template(v-if="!r.src")
+                    router-link.card(:to="'/news/' + r.message_id")
+                        .image(v-if="r.img")
+                            img(:src="r.img")
+                        .date(style="color:#999;font-size:0.8rem;") {{ formatTimestamp(r.timestamp) }}
+                        .content
+                            h3(style='margin-top:0;') {{ r.subject }}
+                            p(:class="{'long' : !r.img}") {{ r.cont }}
+                        .button(style='padding:0 .5rem;') Read More >
+
+                template(v-else)
+                    a.card(:href="r.src" target="_blank")
+                        .image(v-if="r.img")
+                            img(:src="r.img")
+                        .date(style="color:#999;font-size:0.8rem;") {{ formatTimestamp(r.timestamp) }}
+                        .content
+                            h3(style='margin-top:0;') {{ r.subject }}
+                            p(:class="{'long' : !r.img}") {{ r.cont }}
+                        .button(style='padding:0 .5rem;') Read More >
 
 
 //- section.white
@@ -131,6 +141,7 @@ let formatTimestamp = (timestamp) => {
     // border: 1px solid rgba(0,0,0,0.1);
     // border-radius: 1rem;
     width: 100%;
+    word-break: break-all;
 
     &:hover {
         transform: translateY(-5px);
