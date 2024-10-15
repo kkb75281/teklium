@@ -27,24 +27,42 @@ let crawl = async (obj) => {
     obj.cont = preContent[0];
   }
 
-  // News.vue > 특정문자 '$urlurl:' 포함시 외부링크로 이동 (Bulk Email 전송시 유의)
-  let urlurlIndex = html.indexOf('$urlurl:');
+  const isValidUrl = (urlString) => {
+    let urlPattern = new RegExp(
+      '^(https?:\\/\\/)?' + // validate protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // validate domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))' + // validate OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // validate port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?' + // validate query string
+        '(\\#[-a-z\\d_]*)?$',
+      'i'
+    ); // validate fragment locator
 
-  if (urlurlIndex !== -1) {
-    let afterUrlurl = html.substring(urlurlIndex + '$urlurl:'.length).trim();
-    let tempDoc = parser.parseFromString(afterUrlurl, 'text/html');
+    return urlPattern.test(urlString);
+  };
 
-    let anchorTag = tempDoc.querySelector('a');
-    if (anchorTag) {
-      let url = anchorTag.href;
-      if (url && url.startsWith('http')) {
-        obj.src = url;
-      }
+  let extractedText = null;
+
+  const firstDollarIndex = obj.cont.indexOf('$');
+  if (firstDollarIndex !== -1) {
+    extractedText = obj.cont.substring(firstDollarIndex + 1).trim();
+
+    const secondDollarIndex = extractedText.indexOf('$');
+    if (secondDollarIndex !== -1) {
+      extractedText = extractedText.substring(0, secondDollarIndex).trim();
     }
-
-    let cleanedText = obj.cont.replace(/\$urlurl:.*/, '');
-    obj.cont = cleanedText.trim();
   }
+
+  let anchorTag = null;
+
+  if (extractedText && isValidUrl(extractedText)) {
+    anchorTag = `<a href="${extractedText}" target="_blank">${extractedText}</a>`;
+    obj.src = extractedText;
+  } else {
+    // console.log('유효하지 않은 URL입니다.');
+  }
+
+  obj.cont = obj.cont.replace(/\$.*?\$/, '').trim();
 
   return obj;
 };

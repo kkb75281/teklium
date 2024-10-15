@@ -13,7 +13,7 @@ section.white
             Loading
         div(v-else-if="!releases || releases.length === 0" style="text-align:center; color:#999; padding:9rem 0 6rem")
             img(src="/assets/img/error.svg" style="width:3rem; opacity:0.7")
-            p No notice has been uploaded
+            p No article has been uploaded
         .cardWrap(v-else)
             template(v-for="r in releases")
                 template(v-if="!r.src")
