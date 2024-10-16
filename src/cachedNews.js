@@ -64,6 +64,11 @@ let crawl = async (obj) => {
 
   obj.cont = obj.cont.replace(/\$.*?\$/, '').trim();
 
+  obj.newsHtml = doc.body.innerHTML;
+  obj.newsHtml = obj.newsHtml.replace(/\$.*?<a[^>]*>.*?<\/a>/g, '').trim();
+  obj.newsHtml = obj.newsHtml.replace(/\$\$.*?(?=<|$)/g, '').trim();
+  obj.newsHtml = obj.newsHtml.replace(/<pre[^>]*>.*?<\/pre>/g, '').trim();
+
   return obj;
 };
 

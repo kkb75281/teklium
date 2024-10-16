@@ -4,10 +4,9 @@ section.dark(style="padding-top: 12rem")
         h1(v-if="currentNews" style="font-size: 2.8rem; margin-bottom: 0; word-break: break-all") {{ currentNews?.subject }}
 
 section.white 
-    .inner(style="width: 100%; height: 100vh;")
+    .inner
         template(v-if="currentNews")
-            //- div(v-html="newsHtml")
-            iframe(:src="currentNews.url" width="100%" height="100%" frameborder="0" allowfullscreen)
+            div(v-html="currentNews.newsHtml")
 
         template(v-else)
             Loading
@@ -25,7 +24,6 @@ const router = useRouter();
 const route = useRoute();
 
 let currentNews = ref(null);
-// let newsHtml = ref('');
 
 for(let r of releases.value) {
     if(r.message_id === route.params.id) {
